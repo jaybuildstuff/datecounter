@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Jay & Mah’s Shared Messages – track our journey, read daily notes, and look forward to our shared songs." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay & Mah</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        /* Color Palettes */
+        :root {
+            /* Light Mode Colors */
+            --background-color: #f8f0ff;
+            --main-bg-color: #fff;
+            --text-color: #333;
+            --secondary-color: #6A5ACD;
+            --accent-color: #B19CD9;
+            --border-color: #e0d0f5;
+            --button-bg-color: #4a90e2;
+            --button-text-color: #fff;
+        }
+
+        .dark-mode {
+            /* Dark Mode Colors */
+            --background-color: #2c213a;
+            --main-bg-color: #3c324b;
+            --text-color: #e0d5f0;
+            --secondary-color: #f0c5ff;
+            --accent-color: #b19cd9;
+            --border-color: #554466;
+            --button-bg-color: #a58ae0;
+            --button-text-color: #333;
+        }
+
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--background-color);
+            transition: background-color 0.5s ease;
+            padding: 20px; /* Added padding for small screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .container {
+            background-color: var(--main-bg-color);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            font-family: 'Lora', serif;
+            font-size: 2.5rem;
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        .header-subtitle {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.2rem;
+            margin-top: 5px;
+            color: var(--secondary-color);
+        }
+
+        /* Counter */
+        .counter-container {
+            margin: 40px 0;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .counter-title {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+
+        .counter {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+
+        /* Daily Message */
+        .daily-message-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .message-container {
+            background-color: var(--accent-color);
+            color: var(--main-bg-color);
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cat-icon {
+            font-size: 1.5rem;
+            color: var(--main-bg-color);
+            margin: 0 10px;
+        }
+
+        .image-container {
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .custom-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Controls */
+        .message-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-btn, .theme-toggle {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .control-btn:hover, .theme-toggle:hover {
+            filter: brightness(1.1);
+        }
+
+        /* Coming Soon */
+        .coming-soon-section {
+            margin-top: 40px;
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+            transition: border-color 0.5s ease;
+        }
+
+        .coming-soon-title {
+            font-family: 'Lora', serif;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            margin: 0;
+        }
+
+        .coming-soon-text {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+
+        /* Accessibility */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--secondary-color);
+            color: var(--main-bg-color);
+            padding: 8px 16px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+            .header-subtitle {
+                font-size: 1rem;
+            }
+            .counter-title {
+                font-size: 1.5rem;
+            }
+            .counter {
+                font-size: 1.8rem;
+            }
+            .message-container {
+                font-size: 1rem;
+                padding: 15px 20px;
+            }
+            .cat-icon {
+                font-size: 1.2rem;
+                margin: 0 5px;
+            }
+            .control-btn, .theme-toggle {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        .theme-toggle {
+            position: fixed; /* Keep it in place */
+            top: 20px;
+            right: 20px;
+            width: 40px; /* Make it a square button */
+            height: 40px;
+            border-radius: 50%; /* Make it round */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100; /* Ensure it's above other content */
+        }
+        .theme-toggle .fas {
+            color: var(--button-text-color); /* Icon color changes with theme */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip to main content for screen-readers -->
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <!-- Theme Toggle (persistent) -->
+    <button id="themeToggleBtn" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark theme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <header class="header" role="banner">
+            <h1 class="header-title">Jay & Mah's Shared Messages</h1>
+            <p class="header-subtitle">From our chats on Telegram 🫶</p>
+        </header>
+
+        <main id="main" class="main-content" role="main">
+            <!-- Counter Section -->
+            <section class="counter-container" aria-label="Days, weeks and seconds since we started">
+                <h2 class="counter-title">Days since we first talked:</h2>
+                <div id="counter" class="counter" aria-live="polite"></div>
+            </section>
+
+            <!-- Daily Message -->
+            <section class="daily-message-section" aria-label="Today's shared message" aria-live="polite">
+                <div class="message-container">
+                    <i class="fas fa-cat cat-icon" aria-hidden="true"></i>
+                    <p id="daily-message"></p>
+                    <i class="fas fa-cat cat-icon" aria-hidden="true"></i>
+                </div>
+
+                <!-- Share & Copy Controls -->
+                <div class="message-controls">
+                    <button id="copyBtn" class="control-btn"><i class="fas fa-copy"></i> Copy Message</button>
+                    <button id="shareBtn" class="control-btn"><i class="fas fa-share-alt"></i> Share Message</button>
+                </div>
+
+                <!-- Responsive Image (This is your main image, not the daily random one) -->
+                <div class="image-container">
+                    <picture>
+                        <!-- Using the raw.githubusercontent.com domain for direct image access -->
+                        <source srcset="https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg?w=200 200w, https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg?w=400 400w" sizes="(max-width: 400px) 100vw, 400px">
+                        <img src="https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg" alt="A cute and special moment between Jay and Mah" class="custom-image" loading="lazy">
+                    </picture>
+                </div>
+            </section>
+
+            <!-- Shared Images Section (Coming Soon) -->
+            <section class="coming-soon-section" aria-label="Shared images coming soon">
+                <h3 class="coming-soon-title">Our Shared Images</h3>
+                <p class="coming-soon-text">Coming soon... 🖼️</p>
+            </section>
+
+            <!-- Shared Songs Section (Coming Soon) -->
+            <section class="coming-soon-section" aria-label="Shared songs coming soon">
+                <h3 class="coming-soon-title">Our Shared Songs</h3>
+                <p class="coming-soon-text">Coming soon... 🎶</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const startDate = new Date('November 1, 2023');
+        const messages = [
+            "I had a brief moment where I looked at you and thought, something has never felt this right - June 19, 2024",
+            "I looked at you and felt sure. I don't know what of but I felt that way , And I knew I'd never make regrets about you - June 19, 2024",
+            "Seeing you was the best decision, I enjoyed my time, 🫶🏽 I'd do it anyday - June 19, 2024",
+            "Had no idea Obama lived in Chicago - May 31, 2025",
+            "I'm so proud to live in the world with you - January 7, 2025",
+            "pewds is my totoro 🫶🏽 (i havent watched that one) - June 9 2024",
+            ":)",
+            "Don't worry about me konjo",
+            "You're always worth the wait",
+            "How can you say you're not gonna read them and describe them so passionately in the same sentencee - November 24, 2023",
+            "Bitch eat actual misir please😭 - September 28, 2024",
+            "One of the many things i admire about you🙂 - January 5, 2025",
+            "Be careful of men - May 26, 2024",
+            "its so cool when people arent related in blood but become close like family - January 13, 2024",
+            "You're my happy place🫶 - nah, i was made for you - June 24, 2025",
+            "i miss you everyday, from the moment i wake up - June 24, 2025"
+        ];
+
+        // --- SCRIPT LOGIC ---
+        const dailyMessageElement = document.getElementById('daily-message');
+        const counterElement = document.getElementById('counter');
+
+        function updateCounter() {
+            const now = new Date();
+            const timeDifference = now.getTime() - startDate.getTime();
+
+            const seconds = Math.floor(timeDifference / 1000);
+            const days = Math.floor(seconds / (3600 * 24));
+            const weeks = Math.floor(days / 7);
+
+            counterElement.innerHTML = `
+                ${days} days, <br>
+                ${weeks} weeks, <br>
+                and ${seconds} seconds
+            `;
+        }
+
+        function setDailyMessage() {
+            const now = new Date();
+            // Calculate day of the year relative to the start of the year
+            const startOfYear = new Date(now.getFullYear(), 0, 0);
+            const diff = now - startOfYear;
+            const oneDay = 1000 * 60 * 60 * 24;
+            const dayOfYear = Math.floor(diff / oneDay);
+            
+            // Use day of year to cycle through messages
+            const messageIndex = dayOfYear % messages.length;
+
+            dailyMessageElement.textContent = messages[messageIndex];
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setDailyMessage();
+            updateCounter();
+            setInterval(updateCounter, 1000); // Update counter every second
+            
+            // Theme toggle initialization
+            const themeToggleBtn = document.getElementById('themeToggleBtn');
+            const storedTheme = localStorage.getItem('theme');
+            if (storedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+            }
+            themeToggleBtn.setAttribute('aria-pressed', document.body.classList.contains('dark-mode'));
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                themeToggleBtn.setAttribute('aria-pressed', isDark);
+            });
+
+            // Copy and Share button functionality
+            const copyBtn = document.getElementById('copyBtn');
+            const shareBtn = document.getElementById('shareBtn');
+
+            copyBtn.addEventListener('click', () => {
+                // Use execCommand for broader compatibility in iframes
+                const messageText = dailyMessageElement.textContent;
+                const tempInput = document.createElement('textarea');
+                tempInput.value = messageText;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                try {
+                    document.execCommand('copy');
+                    alert('Message copied to clipboard!');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    alert('Could not copy message. Please try manually.');
+                }
+                document.body.removeChild(tempInput);
+            });
+
+            shareBtn.addEventListener('click', async () => {
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Today’s Shared Message',
+                            text: dailyMessageElement.textContent,
+                            url: window.location.href // Use current URL
+                        });
+                    } catch (error) {
+                        // User cancelled the share or an error occurred
+                        console.error('Error sharing:', error);
+                    }
+                } else {
+                    // Fallback for browsers that do not support the Web Share API
+                    alert('Web Share API is not supported in this browser. You can copy the message instead!');
+                }
+            });
+        });
+
+        // Service Worker registration (for PWA features)
+        // This part would typically be in a separate scripts.js file and linked in index.html
+        // For canvas preview, it's included here.
+        // Removed service worker registration as it causes errors in this consolidated setup within Canvas.
+        // If you intend to deploy this as a PWA, you'll need to separate scripts.js and sw.js
+        // and ensure sw.js is served from the root.
+        /*
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js') // This path assumes sw.js is in the root
+                    .then(reg => console.log('Service Worker registered!', reg))
+                    .catch(err => console.error('Service Worker registration failed:', err));
+            });
+        }
+        */
+    </script>
+</body>
+</html>

@@ -1,456 +1,752 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Jay & Mah’s Shared Messages – track our journey, read daily notes, and look forward to our shared songs." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jay & Mah</title>
+// pages/index.js (or app/page.js if using App Router)
+// This file represents the main page of your Next.js application.
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Head from 'next/head'; // For managing document head (title, meta tags, fonts)
+
+// This component will be the main application
+export default function Home() {
+  // --- CONFIGURATION ---
+  const startDate = new Date('2023-11-01T00:00:00');
+  const messages = [
+    "I had a brief moment where I looked at you and thought, something has never felt this right - June 19, 2024",
+    "I looked at you and felt sure. I don't know what of but I felt that way , And I knew I'd never make regrets about you - June 19, 2024",
+    "Seeing you was the best decision, I enjoyed my time, 🫶🏽 I'd do it anyday - June 19, 2024",
+    "Had no idea Obama lived in Chicago - May 31, 2025",
+    "I'm so proud to live in the world with you - January 7, 2025",
+    "pewds is my totoro 🫶🏽 (i havent watched that one) - June 9 2024",
+    ":)",
+    "Don't worry about me konjo",
+    "You're always worth the wait",
+    "How can you say you're not gonna read them and describe them so passionately - Nov 24, 2023",
+    "Bitch eat actual misir please😭 - September 28, 2024",
+    "One of the many things i admire about you🙂 - January 5, 2025",
+    "Be careful of men - May 26, 2024",
+    "its so cool when people arent related in blood but become close like family - January 13, 2024",
+    "You're my happy place🫶 - nah, i was made for you - June 24, 2025",
+    "i miss you everyday, from the moment i wake up - June 24, 2025"
+  ];
+
+  // START OF BIRTHDAYS LIST (Month is 0-indexed: Jan=0, Feb=1, ..., Dec=11)
+  const birthdays = [
+    { name: "Beamlak Samuel", month: 0, day: 1 }, // Jan 1
+    { name: "Addae Madzimoyo", month: 0, day: 7 }, // Jan 7
+    { name: "Tsionawit Abera Desta", month: 0, day: 15 }, // Jan 15
+    { name: "Serukyas Tewahido", month: 1, day: 1 }, // Feb 1
+    { name: "Mathewos Ayelework", month: 1, day: 10 }, // Feb 10
+    { name: "Daniela Pirela-Manares", month: 1, day: 12 }, // Feb 12
+    { name: "Meseret Kiros Alema", month: 1, day: 16 }, // Feb 16
+    { name: "Biniyam (Jay's)", month: 1, day: 19 }, // Feb 19 (Yek 12)
+    { name: "Marcon (Jay's)", month: 1, day: 21 }, // Feb 21
+    { name: "Leul (Jay's)", month: 1, day: 28 }, // Feb 28
+    { name: "Abyssinia Zewdie", month: 2, day: 5 }, // March 5
+    { name: "Neveah Adams", month: 2, day: 7 }, // March 7
+    { name: "Addishiwot Belew Dagnew", month: 2, day: 11 }, // March 11
+    { name: "Fikir Yohannes", month: 2, day: 15 }, // March 15
+    { name: "Beamlak Henok", month: 2, day: 18 }, // March 18
+    { name: "David Minda", month: 2, day: 19 }, // March 19
+    { name: "Senay (Jay's)", month: 2, day: 19 }, // March 19
+    { name: "Yeabsira Tamirat", month: 2, day: 23 }, // March 23
+    { name: "Sammy Senpai", month: 2, day: 28 }, // March 28
+    { name: "Kimberly Hoang", month: 3, day: 10 }, // April 10
+    { name: "Eyerusalem Assefa Shewago", month: 3, day: 13 }, // April 13
+    { name: "Betselot Wogderes", month: 3, day: 20 }, // April 20
+    { name: "Essey Araya", month: 3, day: 30 }, // April 30
+    { name: "Beamlaksra Fasil", month: 4, day: 6 }, // May 6
+    { name: "Bemnet Zekarias", month: 4, day: 14 }, // May 14
+    { name: "Woinshet (Jay's)", month: 4, day: 21 }, // May 21
+    { name: "Claudia Wanjira", month: 4, day: 30 }, // May 30
+    { name: "Basleal (Jay's)", month: 5, day: 4 }, // June 4
+    { name: "Solyana Tamirat", month: 5, day: 7 }, // June 7
+    { name: "Betsinat Wogderes", month: 5, day: 18 }, // June 18
+    { name: "Nahom Mesfin", month: 5, day: 20 }, // June 20
+    { name: "Kamuskay Kamara", month: 5, day: 22 }, // June 22
+    { name: "MOM", month: 5, day: 23 }, // June 23
+    { name: "Abenezer (Jay's)", month: 5, day: 23 }, // June 23
+    { name: "Biruktawit Yaze", month: 5, day: 26 }, // June 26
+    { name: "Rekik Chernet", month: 6, day: 2 }, // July 2
+    { name: "Hermona Desta", month: 6, day: 4 }, // July 4
+    { name: "Minas (Jay's)", month: 6, day: 4 }, // July 4
+    { name: "Lidya Lakew", month: 6, day: 11 }, // July 11
+    { name: "Saratou Bako Bagassa", month: 6, day: 13 }, // July 13
+    { name: "Dr. Carmen Lynas", month: 6, day: 26 }, // July 26
+    { name: "Tsegi (Jay's)", month: 7, day: 1 }, // Aug 1
+    { name: "Biruk Sintayehu Tolla", month: 7, day: 3 }, // Aug 3
+    { name: "Providence Suenge", month: 7, day: 10 }, // Aug 10
+    { name: "Melake Birhanu Negus", month: 7, day: 15 }, // Aug 15
+    { name: "Yafet", month: 7, day: 18 }, // Aug 18
+    { name: "Alazar (Jay's)", month: 8, day: 3 }, // Sep 3
+    { name: "Yididya Merete", month: 8, day: 10 }, // Sep 10
+    { name: "Liya Gebru", month: 8, day: 15 }, // Sep 15
+    { name: "Micheal Adebusoye", month: 8, day: 20 }, // Sep 20
+    { name: "Tesfaye Kefene", month: 8, day: 21 }, // Sep 21
+    { name: "Arphaxad Nyabuto", month: 8, day: 25 }, // Sep 25
+    { name: "Amar Asfaw Dilala", month: 8, day: 27 }, // Sep 27
+    { name: "Nahom Ketsela", month: 8, day: 28 }, // Sep 28
+    { name: "Osman Jalloh", month: 9, day: 2 }, // Oct 2
+    { name: "Blen Tewodros Gulilat", month: 9, day: 10 }, // Oct 10
+    { name: "Bateal Zimna", month: 9, day: 11 }, // Oct 11
+    { name: "Beti (Jay's)", month: 9, day: 11 }, // Oct 11
+    { name: "Daniela Villanueva-Tellez", month: 9, day: 16 }, // Oct 16
+    { name: "Amogelang Dlamini", month: 9, day: 23 }, // Oct 23
+    { name: "Pierre Diatta", month: 9, day: 28 }, // Oct 28
+    { name: "Perle Fayida", month: 10, day: 4 }, // Nov 4
+    { name: "Solome Misganaw", month: 10, day: 5 }, // Nov 5
+    { name: "Berhane Wheeler", month: 10, day: 14 }, // Nov 14
+    { name: "Esterline Charles", month: 10, day: 27 }, // Nov 27
+    { name: "Gertrude Mbewe", month: 10, day: 28 }, // Nov 28
+    { name: "Betelihem Befirdu", month: 10, day: 30 }, // Nov 30
+    { name: "Nika Davenport", month: 10, day: 30 }, // Nov 30
+    { name: "Hizkeal Yeshitla", month: 11, day: 4 }, // Dec 4
+    { name: "Meron Yeshitla", month: 11, day: 4 }, // Dec 4
+    { name: "Sami (Jay's)", month: 11, day: 4 }, // Dec 4
+    { name: "Mam-mary SarrFox", month: 11, day: 5 }, // Dec 5
+    { name: "Sara Naizghi", month: 11, day: 13 }, // Dec 13
+    { name: "Naod Ksmu", month: 11, day: 23 }, // Dec 23
+    { name: "Liya Belay Tessema", month: 11, day: 30 }, // Dec 30
+    { name: "Laura Warren", month: 11, day: 31 } // Dec 31
+  ];
+  // END OF BIRTHDAYS LIST
+
+  // --- STATE MANAGEMENT ---
+  const [years, setYears] = useState(0);
+  const [months, setMonths] = useState(0);
+  const [weeks, setWeeks] = useState(0);
+  const [days, setDays] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+  const [dailyMessage, setDailyMessage] = useState('');
+  const [isBirthdayBannerVisible, setIsBirthdayBannerVisible] = useState(false);
+  const [birthdayBannerMessage, setBirthdayBannerMessage] = useState('');
+  const [isUpcomingBirthdaysModalOpen, setIsUpcomingBirthdaysModalOpen] = useState(false);
+  const [upcomingBirthdaysContent, setUpcomingBirthdaysContent] = useState('');
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const cursorRef = useRef(null);
+  const birthdayInfoBtnRef = useRef(null); // Ref for birthday button to add alert class
+
+  // --- UTILITY FUNCTIONS ---
+  const getOrdinalSuffix = (n) => {
+    if (n > 3 && n < 21) return 'th';
+    switch (n % 10) {
+      case 1:  return 'st';
+      case 2:  return 'nd';
+      case 3:  return 'rd';
+      default: return 'th';
+    }
+  };
+
+  const getMonthName = (monthIndex) => {
+    const monthNames = ["January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"];
+    return monthNames[monthIndex];
+  };
+
+  // --- CORE LOGIC FUNCTIONS (memoized with useCallback) ---
+
+  const updateCounter = useCallback(() => {
+    const now = new Date();
+    const start = new Date(startDate.getTime()); // Create a mutable copy of startDate
+
+    let currentYears = 0;
+    let currentMonths = 0;
+    let currentDays = 0;
+    let currentHours = 0;
+    let currentMinutes = 0;
+    let currentSeconds = 0;
+
+    // Calculate years
+    while (start.getFullYear() < now.getFullYear() ||
+           (start.getFullYear() === now.getFullYear() && (start.getMonth() < now.getMonth() || (start.getMonth() === now.getMonth() && start.getDate() <= now.getDate())))) {
+        
+        let nextYear = new Date(start.getFullYear() + 1, start.getMonth(), start.getDate());
+        if (nextYear.getTime() <= now.getTime()) {
+            currentYears++;
+            start.setFullYear(start.getFullYear() + 1);
+        } else {
+            break;
+        }
+    }
+
+    // Calculate months
+    while (start.getMonth() < now.getMonth() || (start.getMonth() === now.getMonth() && start.getDate() <= now.getDate())) {
+        if (start.getFullYear() === now.getFullYear() && start.getMonth() === now.getMonth() && start.getDate() > now.getDate()) {
+            break; // Prevent overshooting if day of month is later
+        }
+        let nextMonth = new Date(start.getFullYear(), start.getMonth() + 1, start.getDate());
+        if (nextMonth.getTime() <= now.getTime()) {
+            currentMonths++;
+            start.setMonth(start.getMonth() + 1);
+        } else {
+            break;
+        }
+    }
+
+    // Calculate remaining days, hours, minutes, seconds
+    let remainingMillis = now.getTime() - start.getTime();
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
-    <style>
-        /* Color Palettes */
-        :root {
-            /* Light Mode Colors */
-            --background-color: #f8f0ff;
-            --main-bg-color: #fff;
-            --text-color: #333;
-            --secondary-color: #6A5ACD;
-            --accent-color: #B19CD9;
+    currentDays = Math.floor(remainingMillis / (1000 * 60 * 60 * 24));
+    remainingMillis %= (1000 * 60 * 60 * 24);
+
+    currentHours = Math.floor(remainingMillis / (1000 * 60 * 60));
+    remainingMillis %= (1000 * 60 * 60);
+
+    currentMinutes = Math.floor(remainingMillis / (1000 * 60));
+    remainingMillis %= (1000 * 60);
+
+    currentSeconds = Math.floor(remainingMillis / 1000);
+
+    // Weeks are derived from the total days calculated after years/months
+    const totalDaysAfterMonths = Math.floor((now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+    const currentWeeks = Math.floor(totalDaysAfterMonths / 7);
+    const remainingDaysInWeek = totalDaysAfterMonths % 7;
+
+    setYears(currentYears);
+    setMonths(currentMonths);
+    setWeeks(currentWeeks);
+    setDays(remainingDaysInWeek);
+    setHours(currentHours);
+    setMinutes(currentMinutes);
+    setSeconds(currentSeconds);
+  }, [startDate]);
+
+  const setDailyMessage = useCallback(() => {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 0);
+    const diff = now.getTime() - startOfYear.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    const messageIndex = dayOfYear % messages.length;
+    setDailyMessage(messages[messageIndex]);
+  }, [messages]);
+
+  const checkBirthdayToday = useCallback(() => {
+    const today = new Date();
+    const currentMonth = today.getMonth();
+    const currentDay = today.getDate();
+
+    let foundNames = [];
+    for (const person of birthdays) {
+      if (person.month === currentMonth && person.day === currentDay) {
+        foundNames.push(person.name);
+      }
+    }
+
+    if (foundNames.length > 0) {
+      setBirthdayBannerMessage(`Happy Birthday, ${foundNames.join(' and ')}! 🎂`);
+      setIsBirthdayBannerVisible(true);
+    } else {
+      setIsBirthdayBannerVisible(false);
+    }
+  }, [birthdays]);
+
+  const getUpcomingBirthdays = useCallback(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const thirtyDaysFromNow = new Date();
+    thirtyDaysFromNow.setDate(today.getDate() + 30);
+    thirtyDaysFromNow.setHours(23, 59, 59, 999);
+
+    const upcomingList = [];
+
+    for (const person of birthdays) {
+      let nextBirthday = new Date(today.getFullYear(), person.month, person.day);
+
+      if (nextBirthday.getTime() < today.getTime()) {
+        nextBirthday.setFullYear(today.getFullYear() + 1);
+      }
+
+      if (nextBirthday.getTime() >= today.getTime() && nextBirthday.getTime() <= thirtyDaysFromNow.getTime()) {
+        upcomingList.push({
+          name: person.name,
+          date: nextBirthday,
+        });
+      }
+    }
+
+    upcomingList.sort((a, b) => a.date.getTime() - b.date.getTime());
+
+    if (upcomingList.length === 0) {
+      return "No birthdays coming up soon ya'll can relax.";
+    } else {
+      return (
+        <ul>
+          {upcomingList.map((item, index) => (
+            <li key={index}>
+              <strong>{item.name}</strong>: {getMonthName(item.date.getMonth())} {item.date.getDate()}
+            </li>
+          ))}
+        </ul>
+      );
+    }
+  }, [birthdays]);
+
+  const checkUpcomingBirthdayAlert = useCallback(() => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const thirtyDaysFromNow = new Date();
+    thirtyDaysFromNow.setDate(today.getDate() + 30);
+    thirtyDaysFromNow.setHours(23, 59, 59, 999);
+
+    let hasUpcoming = false;
+    for (const person of birthdays) {
+      let nextBirthday = new Date(today.getFullYear(), person.month, person.day);
+      if (nextBirthday.getTime() < today.getTime()) {
+        nextBirthday.setFullYear(today.getFullYear() + 1);
+      }
+      if (nextBirthday.getTime() >= today.getTime() && nextBirthday.getTime() <= thirtyDaysFromNow.getTime()) {
+        hasUpcoming = true;
+        break;
+      }
+    }
+    if (birthdayInfoBtnRef.current) {
+      if (hasUpcoming) {
+        birthdayInfoBtnRef.current.classList.add('alert');
+      } else {
+        birthdayInfoBtnRef.current.classList.remove('alert');
+      }
+    }
+  }, [birthdays]);
+
+  // --- EFFECTS (React Lifecycle) ---
+
+  // Counter and daily message interval
+  useEffect(() => {
+    updateCounter();
+    setDailyMessage();
+    const counterInterval = setInterval(updateCounter, 1000);
+    return () => clearInterval(counterInterval); // Cleanup on unmount
+  }, [updateCounter, setDailyMessage]);
+
+  // Birthday checks
+  useEffect(() => {
+    checkBirthdayToday();
+    checkUpcomingBirthdayAlert();
+  }, [checkBirthdayToday, checkUpcomingBirthdayAlert]);
+
+  // Dark mode persistence
+  useEffect(() => {
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      setIsDarkMode(true);
+      document.documentElement.classList.add('dark-mode'); // Apply to html element for Tailwind
+    }
+  }, []);
+
+  // Custom cursor effect
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (window.innerWidth > 768 && cursorRef.current) {
+        cursorRef.current.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // --- EVENT HANDLERS ---
+  const toggleTheme = () => {
+    setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+      localStorage.setItem('theme', newMode ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark-mode', newMode); // Toggle on html element
+      return newMode;
+    });
+  };
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(dailyMessage);
+      alert('Message copied to clipboard!'); // Using browser alert for simplicity in React context
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+      alert('Could not copy message. Please try manually.');
+    }
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Today’s Shared Message',
+          text: dailyMessage,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('Web Share API is not supported in this browser. You can copy the message instead!');
+    }
+  };
+
+  const openUpcomingBirthdaysModal = () => {
+    setUpcomingBirthdaysContent(getUpcomingBirthdays());
+    setIsUpcomingBirthdaysModalOpen(true);
+  };
+
+  const closeUpcomingBirthdaysModal = () => {
+    setIsUpcomingBirthdaysModalOpen(false);
+  };
+
+  const openCalendarModal = () => {
+    setIsCalendarModalOpen(true);
+  };
+
+  const closeCalendarModal = () => {
+    setIsCalendarModalOpen(false);
+  };
+
+  return (
+    // Tailwind CSS classes are applied directly in JSX
+    <div className={`min-h-screen flex justify-center items-center p-5 box-border ${isDarkMode ? 'dark-mode' : ''}`}>
+      <Head>
+        <meta charSet="UTF-8" />
+        <meta name="description" content="Jay & Mah’s Shared Messages – track our journey, read daily notes, and look forward to our shared songs." />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Jay & Mah</title>
+        {/* Google Fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lora:ital,wght@0,400..700;1,400..700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet" />
+        {/* Font Awesome */}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+        {/* Custom CSS variables (will be overridden by Tailwind where possible) */}
+        <style jsx global>{`
+          :root {
+            --text-color: #110e11;
+            --background-color: #f8f6f9;
+            --main-bg-color: #ffffff;
+            --primary-color: #a660ae;
+            --secondary-color: #d095d7;
+            --accent-color: #cb6bd6;
             --border-color: #e0d0f5;
-            --button-bg-color: #4a90e2;
-            --button-text-color: #fff;
-        }
-
-        .dark-mode {
-            /* Dark Mode Colors */
-            --background-color: #2c213a;
-            --main-bg-color: #3c324b;
-            --text-color: #e0d5f0;
-            --secondary-color: #f0c5ff;
-            --accent-color: #b19cd9;
-            --border-color: #554466;
-            --button-bg-color: #a58ae0;
-            --button-text-color: #333;
-        }
-
-        /* Base Styles */
-        body {
-            margin: 0;
+            --button-text-color: #ffffff;
+            --birthday-banner-bg: #FFD700;
+            --birthday-banner-text: #8B4513;
+            --modal-overlay-bg: rgba(0, 0, 0, 0.6);
+            --modal-bg: #ffffff;
+            --modal-close-btn: #888;
+            --cursor-color: #110e11;
+            --birthday-alert-color: #FF4500;
+          }
+          .dark-mode {
+            --text-color: #f8f6f9;
+            --background-color: #1E1E1E;
+            --main-bg-color: #2E2E2E;
+            --primary-color: #d095d7;
+            --secondary-color: #cb6bd6;
+            --accent-color: #a660ae;
+            --border-color: #4a4a4a;
+            --button-text-color: #f8f6f9;
+            --birthday-banner-bg: #DAA520;
+            --birthday-banner-text: #FFFFFF;
+            --modal-overlay-bg: rgba(0, 0, 0, 0.8);
+            --modal-bg: #2E2E2E;
+            --modal-close-btn: #f8f6f9;
+            --cursor-color: #f8f6f9;
+            --birthday-alert-color: #FF6347;
+          }
+          body {
             font-family: 'DM Sans', sans-serif;
             color: var(--text-color);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background: var(--background-color);
-            transition: background-color 0.5s ease;
-            padding: 20px; /* Added padding for small screens */
-            box-sizing: border-box; /* Include padding in element's total width and height */
-        }
+            transition: background-color 0.5s ease, color 0.5s ease;
+            cursor: none;
+          }
+          .custom-cursor {
+            position: fixed; top: 0; left: 0; width: 12px; height: 12px;
+            background-color: var(--cursor-color); border-radius: 50%;
+            pointer-events: none; transform: translate(-50%, -50%);
+            transition: transform 0.05s ease-out; z-index: 9999;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+          }
+          .dark-mode .custom-cursor { background-color: var(--cursor-color); }
+          @media (max-width: 768px) {
+            body { cursor: default; }
+            .custom-cursor { display: none; }
+          }
+          /* Other global styles from your original CSS, adapted for Next.js/Tailwind context */
+          .header-title { font-family: 'Lora', serif; }
+          .header-subtitle { font-family: 'DM Sans', sans-serif; }
+          .counter-title { font-family: 'Lora', serif; }
+          .time-value { font-family: 'Orbitron', sans-serif; }
+          .time-label { font-family: 'DM Sans', sans-serif; }
+          .message-container { font-family: 'Lora', serif; }
+          .coming-soon-title { font-family: 'Lora', serif; }
+          .coming-soon-text { font-family: 'DM Sans', sans-serif; }
+          .modal-content h3 { font-family: 'Lora', serif; }
+          .modal-content p { font-family: 'DM Sans', sans-serif; }
+          .modal-content ul li { font-family: 'DM Sans', sans-serif; }
 
-        .container {
-            background-color: var(--main-bg-color);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            max-width: 900px;
-            width: 100%;
-            text-align: center;
-            transition: background-color 0.5s ease, box-shadow 0.5s ease;
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Header */
-        .header {
-            margin-bottom: 30px;
-        }
-
-        .header-title {
-            font-family: 'Lora', serif;
-            font-size: 2.5rem;
-            margin: 0;
-            color: var(--secondary-color);
-        }
-
-        .header-subtitle {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.2rem;
-            margin-top: 5px;
-            color: var(--secondary-color);
-        }
-
-        /* Counter */
-        .counter-container {
-            margin: 40px 0;
-            animation: fadeIn 1.5s ease-out;
-        }
-
-        .counter-title {
-            font-family: 'Lora', serif;
-            font-size: 1.8rem;
-            color: var(--secondary-color);
-        }
-
-        .counter {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-
-        /* Daily Message */
-        .daily-message-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            animation: fadeIn 2s ease-out;
-        }
-
-        .message-container {
-            background-color: var(--accent-color);
-            color: var(--main-bg-color);
-            padding: 20px 30px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-            font-family: 'Lora', serif;
-            font-style: italic;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .cat-icon {
-            font-size: 1.5rem;
-            color: var(--main-bg-color);
-            margin: 0 10px;
-        }
-
-        .image-container {
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .custom-image {
-            width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Controls */
-        .message-controls {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .control-btn, .theme-toggle {
-            padding: 0.6rem 1.2rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border: none;
-            background-color: var(--button-bg-color);
-            color: var(--button-text-color);
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .control-btn:hover, .theme-toggle:hover {
-            filter: brightness(1.1);
-        }
-
-        /* Coming Soon */
-        .coming-soon-section {
-            margin-top: 40px;
-            border-top: 2px solid var(--border-color);
-            padding-top: 20px;
-            transition: border-color 0.5s ease;
-        }
-
-        .coming-soon-title {
-            font-family: 'Lora', serif;
-            font-size: 1.5rem;
-            color: var(--secondary-color);
-            margin: 0;
-        }
-
-        .coming-soon-text {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            color: var(--text-color);
-            margin-top: 10px;
-        }
-
-        /* Accessibility */
-        .skip-link {
-            position: absolute;
-            top: -40px;
-            left: 0;
-            background: var(--secondary-color);
-            color: var(--main-bg-color);
-            padding: 8px 16px;
-            z-index: 1000;
-            transition: top 0.3s;
-        }
-
-        .skip-link:focus {
-            top: 0;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .header-title {
-                font-size: 2rem;
-            }
-            .header-subtitle {
-                font-size: 1rem;
-            }
-            .counter-title {
-                font-size: 1.5rem;
-            }
-            .counter {
-                font-size: 1.8rem;
-            }
-            .message-container {
-                font-size: 1rem;
-                padding: 15px 20px;
-            }
-            .cat-icon {
-                font-size: 1.2rem;
-                margin: 0 5px;
-            }
-            .control-btn, .theme-toggle {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        .theme-toggle {
-            position: fixed; /* Keep it in place */
+          /* Fixed position buttons */
+          .theme-toggle, .birthday-info-btn, .calendar-info-btn {
+            position: fixed;
             top: 20px;
-            right: 20px;
-            width: 40px; /* Make it a square button */
+            width: 40px;
             height: 40px;
-            border-radius: 50%; /* Make it round */
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.2rem;
+            background-color: var(--primary-color);
+            color: var(--button-text-color);
+            border: none;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 100; /* Ensure it's above other content */
-        }
-        .theme-toggle .fas {
-            color: var(--button-text-color); /* Icon color changes with theme */
-        }
-    </style>
-</head>
+            z-index: 100;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: pointer;
+          }
+          .theme-toggle { right: 20px; }
+          .birthday-info-btn { right: 70px; }
+          .calendar-info-btn { right: 120px; }
 
-<body>
-    <!-- Skip to main content for screen-readers -->
-    <a href="#main" class="skip-link">Skip to main content</a>
+          .birthday-info-btn.alert {
+            animation: pulse-alert 1.5s infinite;
+            background-color: var(--birthday-alert-color);
+          }
+          @keyframes pulse-alert {
+            0% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 69, 0, 0); }
+          }
+          
+          /* Birthday Notification Banner */
+          #birthdayNotification {
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              background-color: var(--birthday-banner-bg);
+              color: var(--birthday-banner-text);
+              text-align: center;
+              padding: 10px 0;
+              font-family: 'DM Sans', sans-serif;
+              font-size: 1.1rem;
+              z-index: 1000;
+              display: none; /* Hidden by default */
+              box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+              animation: slideDown 0.5s ease-out;
+          }
+          #birthdayNotification.show { display: block; }
+          #birthdayNotification button {
+              background: none; border: none; color: var(--birthday-banner-text);
+              font-size: 1.2rem; cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+          }
+          @keyframes slideDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
 
-    <!-- Theme Toggle (persistent) -->
-    <button id="themeToggleBtn" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark theme">
-        <i class="fas fa-moon"></i>
-    </button>
+          /* Modals */
+          .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--modal-overlay-bg); display: flex; justify-content: center; align-items: center;
+            z-index: 2000; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;
+          }
+          .modal-overlay.show { opacity: 1; visibility: visible; }
+          .modal-content {
+            background: var(--modal-bg); color: var(--modal-text); padding: 30px; border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3); text-align: center; max-width: 400px; width: 90%;
+            position: relative; transform: translateY(-20px); opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+          }
+          .modal-overlay.show .modal-content { transform: translateY(0); opacity: 1; }
+          .modal-content h3 { font-family: 'Lora', serif; font-size: 1.8rem; margin-top: 0; color: var(--primary-color); }
+          .modal-content p { font-family: 'DM Sans', sans-serif; font-size: 1.1rem; line-height: 1.5; margin-bottom: 20px; }
+          .modal-content ul { list-style: none; padding: 0; margin: 0; text-align: left; }
+          .modal-content ul li { font-family: 'DM Sans', sans-serif; font-size: 1rem; padding: 5px 0; border-bottom: 1px dashed var(--border-color); }
+          .modal-content ul li:last-child { border-bottom: none; }
+          .modal-close-btn {
+            background: none; border: none; font-size: 1.5rem; color: var(--modal-close-btn);
+            cursor: pointer; position: absolute; top: 10px; right: 15px;
+          }
+          .modal-close-btn:hover { color: var(--accent-color); }
 
-    <div class="container">
-        <header class="header" role="banner">
-            <h1 class="header-title">Jay & Mah's Shared Messages</h1>
-            <p class="header-subtitle">From our chats on Telegram 🫶</p>
+          /* Responsive adjustments */
+          @media (max-width: 768px) {
+              .header-title { font-size: 2.2rem; }
+              .header-subtitle { font-size: 1rem; }
+              .counter-title { font-size: 1.5rem; }
+              .time-value { font-size: 2rem; }
+              .time-label { font-size: 0.8rem; }
+              .message-container { font-size: 1.1rem; padding: 15px 20px; }
+              .control-btn { padding: 0.5rem 1rem; font-size: 0.9rem; }
+              .theme-toggle { right: 15px; top: 15px; }
+              .birthday-info-btn { right: 60px; top: 15px; }
+              .calendar-info-btn { right: 105px; top: 15px; }
+          }
+          @media (max-width: 480px) {
+              .container { padding: 20px; }
+              .header-title { font-size: 1.8rem; }
+              .header-subtitle { font-size: 0.9rem; }
+              .counter-title { font-size: 1.2rem; }
+              .time-value { font-size: 1.8rem; }
+              .time-box { min-width: 80px; padding: 10px; }
+              .message-container { font-size: 1rem; padding: 10px 15px; }
+              .control-btn { width: calc(50% - 10px); margin: 5px 0; }
+              .theme-toggle, .birthday-info-btn, .calendar-info-btn { width: 35px; height: 35px; font-size: 1rem; }
+              .theme-toggle { right: 10px; top: 10px; }
+              .birthday-info-btn { right: 50px; top: 10px; }
+              .calendar-info-btn { right: 90px; top: 10px; }
+          }
+        `}</style>
+      </Head>
+
+      <a href="#main" className="skip-link absolute -top-10 left-0 bg-[var(--secondary-color)] text-[var(--main-bg-color)] p-2 z-[1000] focus:top-0 transition-all duration-300">Skip to main content</a>
+
+      <button
+        id="themeToggleBtn"
+        className="theme-toggle fixed top-5 right-5 w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-md z-50 cursor-pointer"
+        onClick={toggleTheme}
+        aria-pressed={isDarkMode}
+        aria-label="Toggle light/dark theme"
+        style={{ backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)' }}
+      >
+        <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+      </button>
+
+      <button
+        ref={birthdayInfoBtnRef} // Attach ref here
+        id="birthdayInfoBtn"
+        className="birthday-info-btn fixed top-5 right-[70px] w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-md z-50 cursor-pointer"
+        onClick={openUpcomingBirthdaysModal}
+        aria-label="Show upcoming birthdays"
+        style={{ backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)' }}
+      >
+        <i className="fas fa-birthday-cake"></i>
+      </button>
+
+      <button
+        id="calendarInfoBtn"
+        className="calendar-info-btn fixed top-5 right-[120px] w-10 h-10 rounded-full flex items-center justify-center text-lg shadow-md z-50 cursor-pointer"
+        onClick={openCalendarModal}
+        aria-label="Show calendar and holidays"
+        style={{ backgroundColor: 'var(--primary-color)', color: 'var(--button-text-color)' }}
+      >
+        <i className="fas fa-calendar-alt"></i>
+      </button>
+
+      {/* Birthday Notification Banner */}
+      <div id="birthdayNotification" className={`fixed top-0 left-0 w-full text-center p-2 shadow-md z-40 ${isBirthdayBannerVisible ? 'show' : 'hidden'}`}
+           style={{ backgroundColor: 'var(--birthday-banner-bg)', color: 'var(--birthday-banner-text)' }}>
+        <span id="birthdayMessage">{birthdayBannerMessage}</span>
+        <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-none border-none text-lg cursor-pointer"
+                onClick={() => setIsBirthdayBannerVisible(false)}
+                style={{ color: 'var(--birthday-banner-text)' }}>
+          <i className="fas fa-times"></i>
+        </button>
+      </div>
+
+      {/* Upcoming Birthdays Modal */}
+      <div id="upcomingBirthdaysModal" className={`modal-overlay fixed top-0 left-0 w-full h-full flex justify-center items-center z-[2000] transition-opacity duration-300 ${isUpcomingBirthdaysModalOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+           style={{ background: 'var(--modal-overlay-bg)' }}
+           onClick={(e) => e.target.id === 'upcomingBirthdaysModal' && closeUpcomingBirthdaysModal()}>
+        <div className={`modal-content bg-[var(--modal-bg)] text-[var(--modal-text)] p-8 rounded-xl shadow-lg text-center max-w-md w-[90%] relative transition-transform duration-300 ${isUpcomingBirthdaysModalOpen ? 'translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}`}>
+          <button className="modal-close-btn absolute top-2.5 right-4 text-2xl cursor-pointer" onClick={closeUpcomingBirthdaysModal} style={{ color: 'var(--modal-close-btn)' }}>
+            <i className="fas fa-times"></i>
+          </button>
+          <h3 className="font-lora text-2xl mt-0 mb-5" style={{ color: 'var(--primary-color)' }}>Upcoming Birthdays</h3>
+          <div id="upcomingBirthdaysContent" className="font-dm-sans text-lg leading-relaxed mb-5">
+            {upcomingBirthdaysContent}
+          </div>
+        </div>
+      </div>
+
+      {/* Calendar Modal (Coming Soon) */}
+      <div id="calendarModal" className={`modal-overlay fixed top-0 left-0 w-full h-full flex justify-center items-center z-[2000] transition-opacity duration-300 ${isCalendarModalOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+           style={{ background: 'var(--modal-overlay-bg)' }}
+           onClick={(e) => e.target.id === 'calendarModal' && closeCalendarModal()}>
+        <div className={`modal-content bg-[var(--modal-bg)] text-[var(--modal-text)] p-8 rounded-xl shadow-lg text-center max-w-md w-[90%] relative transition-transform duration-300 ${isCalendarModalOpen ? 'translate-y-0 opacity-100' : '-translate-y-5 opacity-0'}`}>
+          <button className="modal-close-btn absolute top-2.5 right-4 text-2xl cursor-pointer" onClick={closeCalendarModal} style={{ color: 'var(--modal-close-btn)' }}>
+            <i className="fas fa-times"></i>
+          </button>
+          <h3 className="font-lora text-2xl mt-0 mb-5" style={{ color: 'var(--primary-color)' }}>Our Mixed Calendar</h3>
+          <p id="calendarContent" className="font-dm-sans text-lg leading-relaxed mb-5">
+            Ethiopian and International holidays coming soon... 🎉
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-[var(--main-bg-color)] p-10 rounded-xl shadow-xl max-w-3xl w-full text-center transition-colors duration-500 animate-fade-in">
+        <header className="mb-8">
+          <h1 className="header-title text-[var(--primary-color)] text-5xl font-lora mb-2">Jay & Mah's Shared Messages</h1>
+          <p className="header-subtitle text-[var(--secondary-color)] text-lg font-dm-sans">From our chats on Telegram 🫶</p>
         </header>
 
-        <main id="main" class="main-content" role="main">
-            <!-- Counter Section -->
-            <section class="counter-container" aria-label="Days, weeks and seconds since we started">
-                <h2 class="counter-title">Days since we first talked:</h2>
-                <div id="counter" class="counter" aria-live="polite"></div>
+        <main id="main" role="main">
+          {/* Counter Section */}
+          <section className="mb-10 animate-fade-in-delay-1" aria-label="Days, weeks and seconds since we started">
+            <h2 className="counter-title text-[var(--primary-color)] text-3xl font-lora">Days since we first talked:</h2>
+            <div id="counter" className="counter flex flex-wrap justify-center gap-4 mt-5">
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="yearsValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{years}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Years</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="monthsValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{months}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Months</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="weeksValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{weeks}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Weeks</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="daysValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{days}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Days</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="hoursValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{hours}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Hours</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="minutesValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{minutes}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Minutes</span>
+              </div>
+              <div className="time-box bg-[var(--secondary-color)] p-4 rounded-lg shadow-md flex flex-col items-center justify-center min-w-[100px] transition-colors duration-500">
+                <span id="secondsValue" className="time-value text-[var(--text-color)] text-4xl font-orbitron font-bold leading-none mb-1">{seconds}</span>
+                <span className="time-label text-[var(--text-color)] text-sm uppercase tracking-wider font-dm-sans">Seconds</span>
+              </div>
+            </div>
+          </section>
+
+          {/* Daily Message */}
+          <section className="animate-fade-in-delay-2" aria-label="Today's shared message">
+            <div className="bg-[var(--accent-color)] text-[var(--main-bg-color)] p-5 rounded-xl my-5 font-lora italic text-xl shadow-md flex items-center justify-center">
+              <i className="fas fa-cat text-2xl mr-2" style={{ color: 'var(--main-bg-color)' }}></i>
+              <span id="daily-message">{dailyMessage}</span>
+              <i className="fas fa-cat text-2xl ml-2" style={{ color: 'var(--main-bg-color)' }}></i>
+            </div>
+
+            {/* Share & Copy Controls */}
+            <div className="flex gap-4 mb-4 justify-center flex-wrap">
+              <button onClick={handleCopy} className="control-btn bg-[var(--primary-color)] text-[var(--button-text-color)] px-4 py-2 rounded-md text-base transition-colors duration-300 hover:brightness-110">
+                <i className="fas fa-copy mr-2"></i> Copy Message
+              </button>
+              <button onClick={handleShare} className="control-btn bg-[var(--primary-color)] text-[var(--button-text-color)] px-4 py-2 rounded-md text-base transition-colors duration-300 hover:brightness-110">
+                <i className="fas fa-share-alt mr-2"></i> Share Message
+              </button>
+            </div>
+
+            {/* Shared Images Section (Coming Soon) - Now in main content area */}
+            <section className="mt-10 border-t-2 border-[var(--border-color)] pt-5 transition-colors duration-500" aria-label="Shared images coming soon">
+              <h3 className="font-lora text-2xl text-[var(--primary-color)] mb-2">Our Shared Images</h3>
+              <p className="font-dm-sans text-base text-[var(--text-color)]">Coming soon... 🖼️</p>
             </section>
+          </section>
 
-            <!-- Daily Message -->
-            <section class="daily-message-section" aria-label="Today's shared message" aria-live="polite">
-                <div class="message-container">
-                    <i class="fas fa-cat cat-icon" aria-hidden="true"></i>
-                    <p id="daily-message"></p>
-                    <i class="fas fa-cat cat-icon" aria-hidden="true"></i>
-                </div>
-
-                <!-- Share & Copy Controls -->
-                <div class="message-controls">
-                    <button id="copyBtn" class="control-btn"><i class="fas fa-copy"></i> Copy Message</button>
-                    <button id="shareBtn" class="control-btn"><i class="fas fa-share-alt"></i> Share Message</button>
-                </div>
-
-                <!-- Responsive Image (This is your main image, not the daily random one) -->
-                <div class="image-container">
-                    <picture>
-                        <!-- Using the raw.githubusercontent.com domain for direct image access -->
-                        <source srcset="https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg?w=200 200w, https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg?w=400 400w" sizes="(max-width: 400px) 100vw, 400px">
-                        <img src="https://raw.githubusercontent.com/jaybuildstuff/imagem/main/photo_2024-08-27_22-07-26.jpg" alt="A cute and special moment between Jay and Mah" class="custom-image" loading="lazy">
-                    </picture>
-                </div>
-            </section>
-
-            <!-- Shared Images Section (Coming Soon) -->
-            <section class="coming-soon-section" aria-label="Shared images coming soon">
-                <h3 class="coming-soon-title">Our Shared Images</h3>
-                <p class="coming-soon-text">Coming soon... 🖼️</p>
-            </section>
-
-            <!-- Shared Songs Section (Coming Soon) -->
-            <section class="coming-soon-section" aria-label="Shared songs coming soon">
-                <h3 class="coming-soon-title">Our Shared Songs</h3>
-                <p class="coming-soon-text">Coming soon... 🎶</p>
-            </section>
+          {/* Shared Songs Section (Coming Soon) */}
+          <section className="mt-10 border-t-2 border-[var(--border-color)] pt-5 transition-colors duration-500" aria-label="Shared songs coming soon">
+            <h3 className="font-lora text-2xl text-[var(--primary-color)] mb-2">Our Shared Songs</h3>
+            <p className="font-dm-sans text-base text-[var(--text-color)]">Coming soon... 🎶</p>
+          </section>
         </main>
+      </div>
+
+      {/* Custom Cursor Element */}
+      <div ref={cursorRef} className="custom-cursor hidden md:block"></div>
     </div>
-
-    <script>
-        // --- CONFIGURATION ---
-        const startDate = new Date('November 1, 2023');
-        const messages = [
-            "I had a brief moment where I looked at you and thought, something has never felt this right - June 19, 2024",
-            "I looked at you and felt sure. I don't know what of but I felt that way , And I knew I'd never make regrets about you - June 19, 2024",
-            "Seeing you was the best decision, I enjoyed my time, 🫶🏽 I'd do it anyday - June 19, 2024",
-            "Had no idea Obama lived in Chicago - May 31, 2025",
-            "I'm so proud to live in the world with you - January 7, 2025",
-            "pewds is my totoro 🫶🏽 (i havent watched that one) - June 9 2024",
-            ":)",
-            "Don't worry about me konjo",
-            "You're always worth the wait",
-            "How can you say you're not gonna read them and describe them so passionately in the same sentencee - November 24, 2023",
-            "Bitch eat actual misir please😭 - September 28, 2024",
-            "One of the many things i admire about you🙂 - January 5, 2025",
-            "Be careful of men - May 26, 2024",
-            "its so cool when people arent related in blood but become close like family - January 13, 2024",
-            "You're my happy place🫶 - nah, i was made for you - June 24, 2025",
-            "i miss you everyday, from the moment i wake up - June 24, 2025"
-        ];
-
-        // --- SCRIPT LOGIC ---
-        const dailyMessageElement = document.getElementById('daily-message');
-        const counterElement = document.getElementById('counter');
-
-        function updateCounter() {
-            const now = new Date();
-            const timeDifference = now.getTime() - startDate.getTime();
-
-            const seconds = Math.floor(timeDifference / 1000);
-            const days = Math.floor(seconds / (3600 * 24));
-            const weeks = Math.floor(days / 7);
-
-            counterElement.innerHTML = `
-                ${days} days, <br>
-                ${weeks} weeks, <br>
-                and ${seconds} seconds
-            `;
-        }
-
-        function setDailyMessage() {
-            const now = new Date();
-            // Calculate day of the year relative to the start of the year
-            const startOfYear = new Date(now.getFullYear(), 0, 0);
-            const diff = now - startOfYear;
-            const oneDay = 1000 * 60 * 60 * 24;
-            const dayOfYear = Math.floor(diff / oneDay);
-            
-            // Use day of year to cycle through messages
-            const messageIndex = dayOfYear % messages.length;
-
-            dailyMessageElement.textContent = messages[messageIndex];
-        }
-
-        // --- INITIALIZATION ---
-        document.addEventListener('DOMContentLoaded', () => {
-            setDailyMessage();
-            updateCounter();
-            setInterval(updateCounter, 1000); // Update counter every second
-            
-            // Theme toggle initialization
-            const themeToggleBtn = document.getElementById('themeToggleBtn');
-            const storedTheme = localStorage.getItem('theme');
-            if (storedTheme === 'dark') {
-                document.body.classList.add('dark-mode');
-            }
-            themeToggleBtn.setAttribute('aria-pressed', document.body.classList.contains('dark-mode'));
-
-            themeToggleBtn.addEventListener('click', () => {
-                const isDark = document.body.classList.toggle('dark-mode');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                themeToggleBtn.setAttribute('aria-pressed', isDark);
-            });
-
-            // Copy and Share button functionality
-            const copyBtn = document.getElementById('copyBtn');
-            const shareBtn = document.getElementById('shareBtn');
-
-            copyBtn.addEventListener('click', () => {
-                // Use execCommand for broader compatibility in iframes
-                const messageText = dailyMessageElement.textContent;
-                const tempInput = document.createElement('textarea');
-                tempInput.value = messageText;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                try {
-                    document.execCommand('copy');
-                    alert('Message copied to clipboard!');
-                } catch (err) {
-                    console.error('Failed to copy text: ', err);
-                    alert('Could not copy message. Please try manually.');
-                }
-                document.body.removeChild(tempInput);
-            });
-
-            shareBtn.addEventListener('click', async () => {
-                if (navigator.share) {
-                    try {
-                        await navigator.share({
-                            title: 'Today’s Shared Message',
-                            text: dailyMessageElement.textContent,
-                            url: window.location.href // Use current URL
-                        });
-                    } catch (error) {
-                        // User cancelled the share or an error occurred
-                        console.error('Error sharing:', error);
-                    }
-                } else {
-                    // Fallback for browsers that do not support the Web Share API
-                    alert('Web Share API is not supported in this browser. You can copy the message instead!');
-                }
-            });
-        });
-
-        // Service Worker registration (for PWA features)
-        // This part would typically be in a separate scripts.js file and linked in index.html
-        // For canvas preview, it's included here.
-        // Removed service worker registration as it causes errors in this consolidated setup within Canvas.
-        // If you intend to deploy this as a PWA, you'll need to separate scripts.js and sw.js
-        // and ensure sw.js is served from the root.
-        /*
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js') // This path assumes sw.js is in the root
-                    .then(reg => console.log('Service Worker registered!', reg))
-                    .catch(err => console.error('Service Worker registration failed:', err));
-            });
-        }
-        */
-    </script>
-</body>
-</html>
+  );
+}

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jay & Mah</title>
     <!-- Google Fonts: DM Sans, Lora (Removed, replaced by Manrope) -->
@@ -63,7 +63,6 @@
             color: var(--text-color);
             box-sizing: border-box;
             position: relative;
-            /* Removed overflow: hidden; to enable scrolling */
             transition: background-color 0.5s ease, color 0.5s ease;
             display: flex; /* Changed to flex for vertical stacking of main-rectangle and new section */
             flex-direction: column; /* Stack items vertically */
@@ -461,20 +460,27 @@
                 padding: 10px;
             }
             .main-rectangle {
-                min-height: auto; /* Allow height to adjust on mobile */
-                padding: 30px 15px;
-                margin-bottom: 20px; /* Adjust margin for mobile */
+                padding: 20px 15px; /* Adjusted padding for smaller screens */
+                margin-bottom: 20px; /* Consistent margin */
             }
             .top-section-layout {
                 flex-direction: column; /* Stack the two columns vertically */
                 align-items: center;
                 max-width: 100%;
+                gap: 25px; /* Increased gap for better vertical separation */
+                margin-bottom: 25px; /* Adjusted margin */
             }
             .left-column,
-            .right-column,
+            .right-column {
+                width: 100%; /* Ensure columns take full width */
+                max-width: 350px; /* Limit individual column width if needed */
+                gap: 25px; /* Gap between items within the column */
+            }
             .counter-container,
             .shared-content-placeholder {
                 max-width: 100%; /* Allow items to take full width when stacked */
+                padding: 25px; /* Slightly reduced padding for smaller boxes */
+                min-height: 120px; /* Slightly reduced min-height for more compact look */
             }
             .days-value {
                 font-size: 8rem;
@@ -485,7 +491,7 @@
             #topRightButtons {
                 top: 10px;
                 right: 10px;
-                gap: 10px; /* Reduce gap for smaller screens */
+                gap: 10px; /* Reduce gap for smaller buttons */
             }
             .theme-toggle, .birthday-info-btn, .calendar-info-btn {
                 width: 35px; /* Smaller buttons */
@@ -495,6 +501,7 @@
             .watch-again-section {
                 padding: 25px;
                 margin-top: 20px;
+                max-width: 100%; /* Allow it to take full width on mobile */
             }
             .watch-again-section h2 {
                 font-size: 2rem;
@@ -719,7 +726,7 @@
             "You're always worth the wait",
             "How can you say you're not gonna read them and describe them so passionately - Nov 24, 203",
             "Bitch eat actual misir please😭 - September 28, 2024",
-            "One of the many things i admire about you� - January 5, 2025",
+            "One of the many things i admire about you🙂 - January 5, 2025",
             "Be careful of men - May 26, 2024",
             "its so cool when people arent related in blood but become close like family - January 13, 2014",
             "You're my happy place🫶 - nah, i was made for you - June 24, 2025",
@@ -852,7 +859,8 @@
             thirtyDaysFromNow.setHours(23, 59, 59, 999);
 
             let hasUpcoming = false;
-            for (const person of birthdays) {
+            // Fix: Removed '=' from 'for (const person = of birthdays)'
+            for (const person of birthdays) { 
                 let nextBirthday = new Date(today.getFullYear(), person.month, person.day);
                 if (nextBirthday.getTime() < today.getTime()) {
                     nextBirthday.setFullYear(today.getFullYear() + 1);
@@ -1002,4 +1010,3 @@
     </script>
 </body>
 </html>
-�

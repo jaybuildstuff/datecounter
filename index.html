@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jay & Mah</title>
-    <!-- Google Fonts: DM Sans, Lora -->
+    <!-- Google Fonts: DM Sans, Lora (Removed, replaced by Manrope) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Manrope font import for Light (300) and Semibold (600) -->
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;600&display=swap" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
@@ -29,7 +30,6 @@
             --modal-bg: #ffffff;
             --modal-text: #333;
             --modal-close-btn: #888;
-            /* Removed --cursor-color */
             --birthday-alert-color: #FF4500; /* OrangeRed for alert */
         }
 
@@ -49,7 +49,6 @@
             --modal-bg: #2E2E2E;
             --modal-text: #e0d5f0;
             --modal-close-btn: #f8f6f9;
-            /* Removed --cursor-color */
             --birthday-alert-color: #FF6347; /* Tomato for alert in dark mode */
         }
 
@@ -59,15 +58,16 @@
             background-size: 400% 400%;
             animation: gradient-animation 20s ease infinite;
             min-height: 100vh;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
+            font-weight: 300; /* Light for all general text */
             color: var(--text-color);
             box-sizing: border-box;
             position: relative;
-            overflow: hidden;
+            /* Removed overflow: hidden; to enable scrolling */
             transition: background-color 0.5s ease, color 0.5s ease;
-            /* Removed cursor: none; */
-            display: grid; 
-            place-items: center; 
+            display: flex; /* Changed to flex for vertical stacking of main-rectangle and new section */
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center content horizontally */
             padding: 20px;
         }
 
@@ -90,7 +90,6 @@
             background-size: 400% 400%;
             animation: gradient-animation 15s ease infinite;
             width: 100%;
-            min-height: 85vh; 
             max-width: 900px;
             border-radius: 20px;
             padding: 50px 30px;
@@ -100,9 +99,10 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: flex-start; /* Align content to the top */
             align-items: center;
-            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+            transition: transform 0.1s ease-out, background-color 0.5s ease, box-shadow 0.5s ease; /* Added transform transition */
+            margin-bottom: 30px; /* Add space below the main rectangle */
         }
 
         .main-rectangle::before {
@@ -128,24 +128,45 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Top Row Container for Counter and Placeholders */
-        .top-content-row {
+        /* Top section containing two columns (counter+new placeholder, images+songs) */
+        .top-section-layout {
             display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: flex-start;
+            flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+            justify-content: center; /* Center the two columns */
+            align-items: stretch; /* Make columns stretch to equal height */
             width: 100%;
-            flex-wrap: wrap;
-            gap: 20px;
+            gap: 20px; /* Space between the two columns */
+            margin-bottom: 30px; /* Space below this section */
+        }
+
+        /* Left Column: Counter and New Placeholder */
+        .left-column {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally within this column */
+            gap: 20px; /* Space between counter and new placeholder */
+            flex: 1 1 300px; /* Allow column to grow/shrink, with a base width */
+            max-width: 400px; /* Max width for this column */
+            justify-content: flex-end; /* Push content to the bottom of the column */
+        }
+
+        /* Right Column: Images and Songs */
+        .right-column {
+            display: flex;
+            flex-direction: column; /* Stack items vertically */
+            align-items: center; /* Center items horizontally within this column */
+            gap: 20px; /* Space between image and song placeholders */
+            flex: 1 1 300px; /* Allow column to grow/shrink, with a base width */
+            max-width: 400px; /* Max width for this column */
+            justify-content: flex-end; /* Push content to the bottom of the column */
         }
 
         /* Counter Styling */
         .counter-container {
             text-align: center;
-            margin-bottom: 20px;
             color: var(--text-color);
-            flex: 1 1 280px;
-            max-width: 300px;
+            width: 100%; /* Take full width of its parent column */
+            max-width: 300px; /* Maintain a max width for the counter itself */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -160,53 +181,60 @@
         }
 
         .days-value {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 10rem;
-            font-weight: 700;
+            font-weight: 600; /* Semibold for the day counter */
             color: var(--text-color);
             line-height: 1;
             margin-top: 20px;
         }
 
         .seconds-value {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 2rem;
-            font-weight: 400;
+            font-weight: 300; /* Light for seconds */
             color: var(--text-color);
             line-height: 1;
             margin-top: 10px;
         }
         
         .time-label {
-            font-family: 'Lora', serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 1.5rem;
+            font-weight: 300; /* Light for time labels */
             opacity: 0.8;
             color: var(--text-color);
         }
 
-        /* Theme Toggle Button */
-        .theme-toggle, .birthday-info-btn, .calendar-info-btn {
+        /* Container for top-right fixed buttons */
+        #topRightButtons {
             position: fixed;
             top: 20px;
-            width: 40px;
-            height: 40px;
+            right: 20px;
+            z-index: 9999; /* Ensure it's always on top */
+            display: flex;
+            flex-direction: row-reverse; /* Arrange buttons from right to left */
+            gap: 15px; /* Space between buttons */
+            align-items: center;
+        }
+
+        /* Theme Toggle Button and other fixed buttons styling */
+        .theme-toggle, .birthday-info-btn, .calendar-info-btn {
+            width: 45px; /* Slightly larger */
+            height: 45px; /* Slightly larger */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.3rem; /* Slightly larger icon */
             background-color: var(--primary-color);
             color: var(--button-text-color);
             border: none;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 100;
             cursor: pointer;
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            position: static; /* Override fixed from previous iterations if any */
         }
-        .theme-toggle { right: 20px; }
-        .birthday-info-btn { right: 70px; }
-        .calendar-info-btn { right: 120px; }
-
         .theme-toggle:hover, .birthday-info-btn:hover, .calendar-info-btn:hover {
             transform: scale(1.05);
         }
@@ -232,15 +260,15 @@
             padding: 30px;
             border-radius: 15px;
             text-align: center;
-            flex: 1 1 200px; /* Allow items to grow and shrink, with a base of 200px */
-            max-width: 250px; /* Keep max-width for individual items */
+            width: 100%; /* Take full width of its parent column */
+            max-width: 350px; /* Reduced max-width for more spacing */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             transition: background-color 0.5s ease, color 0.5s ease;
-            min-height: 200px;
+            min-height: 150px; /* Min-height for placeholders */
         }
         .shared-content-placeholder .icon {
             font-size: 3rem;
@@ -248,63 +276,46 @@
             color: var(--primary-color);
         }
         .shared-content-placeholder .title {
-            font-family: 'Lora', serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 1.5rem;
+            font-weight: 300; /* Light for titles */
             margin-bottom: 5px;
         }
         .shared-content-placeholder .coming-soon-text {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 1rem;
+            font-weight: 300; /* Light for coming soon text */
             opacity: 0.8;
         }
-        .dark-mode .shared-content-placeholder {
-            background-color: var(--accent-color);
-            color: var(--text-color);
+
+        /* Specific style for the daily message content inside the placeholder */
+        .shared-content-placeholder.new-placeholder .daily-message-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            flex-grow: 1; /* Allow content to grow */
+            width: 100%; /* Ensure it spans the width */
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
+            font-size: 1.3rem;
+            font-weight: 300; /* Light for daily message text */
+            line-height: 1.5;
         }
-        .dark-mode .shared-content-placeholder .icon {
-            color: var(--secondary-color);
+        /* Styling for the SVG icon within the daily message */
+        .shared-content-placeholder.new-placeholder .daily-message-content svg {
+            width: 1.8em; /* Match font-size of previous icon */
+            height: 1.8em; /* Match font-size of previous icon */
+            margin: 0 10px;
+            color: var(--text-color); /* Inherit color from parent */
+            fill: currentColor; /* Ensure SVG fills with current text color */
+            stroke: currentColor; /* Ensure SVG strokes with current text color */
+        }
+        /* Ensure paths within the SVG also inherit color */
+        .shared-content-placeholder.new-placeholder .daily-message-content svg path {
+            fill: currentColor;
+            stroke: currentColor;
         }
 
-        /* Daily Message Box */
-        .daily-message-box {
-            background-color: var(--accent-color);
-            color: var(--text-color);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 30px;
-            width: 95%;
-            max-width: 800px;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1.3rem;
-            line-height: 1.5;
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-        .daily-message-box .message-content {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            flex-grow: 1;
-        }
-        .daily-message-box .icon {
-            font-size: 1.8rem;
-            margin: 0 10px;
-            color: var(--text-color);
-        }
-        .dark-mode .daily-message-box {
-            background-color: var(--primary-color);
-            color: var(--text-color);
-        }
-        .dark-mode .daily-message-box .icon {
-            color: var(--text-color);
-        }
 
         /* Birthday Notification Banner */
         .birthday-notification {
@@ -323,8 +334,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 1.1rem;
+            font-weight: 300; /* Light for banner text */
             transition: transform 0.3s ease-in-out;
             transform: translateY(100%) translateX(-50%);
         }
@@ -383,14 +395,16 @@
             cursor: pointer;
         }
         .modal-content h3 {
-            font-family: 'Lora', serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 2rem;
+            font-weight: 300; /* Light for modal titles */
             margin-top: 0;
             color: var(--secondary-color);
         }
         .modal-content p {
-            font-family: 'DM Sans', sans-serif;
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
             font-size: 1rem;
+            font-weight: 300; /* Light for modal paragraphs */
         }
         .modal-content ul {
             list-style-type: none;
@@ -401,23 +415,45 @@
             margin-bottom: 10px;
             padding-bottom: 5px;
             border-bottom: 1px solid var(--border-color);
+            font-family: 'Manrope', sans-serif; /* Changed to Manrope */
+            font-weight: 300; /* Light for list items */
         }
         .modal-content li:last-child {
             border-bottom: none;
         }
 
-        /* Removed custom cursor styles */
-        /* .custom-cursor {
-            width: 25px;
-            height: 25px;
-            border: 2px solid var(--cursor-color);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.1s;
-            z-index: 9999;
-        } */
+        /* New section for Watch Again content */
+        .watch-again-section {
+            background-color: var(--main-bg-color); /* Light purple background */
+            color: var(--text-color);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            width: 100%;
+            max-width: 800px; /* Slightly narrower than main-rectangle for visual hierarchy */
+            box-shadow: 0 8px 30px rgba(180, 180, 180, 0.4);
+            margin-top: 30px; /* Space from the content above */
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .watch-again-section h2 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600; /* Semibold for section title */
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        .watch-again-section p {
+            font-family: 'Manrope', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
 
         /* Responsive adjustments for smaller screens */
         @media (max-width: 768px) {
@@ -425,17 +461,20 @@
                 padding: 10px;
             }
             .main-rectangle {
-                min-height: 90vh;
+                min-height: auto; /* Allow height to adjust on mobile */
                 padding: 30px 15px;
+                margin-bottom: 20px; /* Adjust margin for mobile */
             }
-            .top-content-row {
-                flex-direction: column;
+            .top-section-layout {
+                flex-direction: column; /* Stack the two columns vertically */
                 align-items: center;
-                gap: 30px;
-            }
-            .counter-container {
                 max-width: 100%;
-                margin-bottom: 0;
+            }
+            .left-column,
+            .right-column,
+            .counter-container,
+            .shared-content-placeholder {
+                max-width: 100%; /* Allow items to take full width when stacked */
             }
             .days-value {
                 font-size: 8rem;
@@ -443,40 +482,41 @@
             .seconds-value {
                 font-size: 1.5rem;
             }
-            .shared-content-placeholder {
-                max-width: 100%;
-                min-height: auto;
-            }
-            .theme-toggle, .birthday-info-btn, .calendar-info-btn {
-                width: 35px;
-                height: 35px;
-                font-size: 1rem;
+            #topRightButtons {
                 top: 10px;
                 right: 10px;
+                gap: 10px; /* Reduce gap for smaller screens */
             }
-            .birthday-info-btn { right: 55px; }
-            .calendar-info-btn { right: 100px; }
-            .daily-message-box {
-                width: 100%;
-                font-size: 1.1rem;
+            .theme-toggle, .birthday-info-btn, .calendar-info-btn {
+                width: 35px; /* Smaller buttons */
+                height: 35px; /* Smaller buttons */
+                font-size: 1rem; /* Smaller icon */
             }
-            /* Removed custom cursor display for mobile */
-            /* .custom-cursor {
-                display: none;
-            } */
+            .watch-again-section {
+                padding: 25px;
+                margin-top: 20px;
+            }
+            .watch-again-section h2 {
+                font-size: 2rem;
+            }
+            .watch-again-section p {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <button id="themeToggleBtn" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark theme">
-        <i class="fas fa-moon"></i>
-    </button>
-    <button id="birthdayInfoBtn" class="birthday-info-btn" aria-label="Show upcoming birthdays">
-        <i class="fas fa-birthday-cake"></i>
-    </button>
-    <button id="calendarInfoBtn" class="calendar-info-btn" aria-label="Show calendar and holidays">
-        <i class="fas fa-calendar-alt"></i>
-    </button>
+    <div id="topRightButtons">
+        <button id="themeToggleBtn" class="theme-toggle" aria-pressed="false" aria-label="Toggle light/dark theme">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button id="birthdayInfoBtn" class="birthday-info-btn" aria-label="Show upcoming birthdays">
+            <i class="fas fa-birthday-cake"></i>
+        </button>
+        <button id="calendarInfoBtn" class="calendar-info-btn" aria-label="Show calendar and holidays">
+            <i class="fas fa-calendar-alt"></i>
+        </button>
+    </div>
     
     <!-- Birthday Notification Banner -->
     <div id="birthdayNotification" class="birthday-notification">
@@ -503,42 +543,61 @@
     </div>
 
     <div class="main-rectangle">
-        <!-- Main content row: Days Counter, Shared Images, and Shared Songs -->
-        <div class="top-content-row">
-            <div class="counter-container">
-                <!-- Removed "Days since we started" text -->
-                <span id="daysValue" class="days-value">0</span>
-                <span class="time-label">Seconds</span>
-                <span id="secondsValue" class="seconds-value">0</span>
+        <!-- Top section containing two columns -->
+        <div class="top-section-layout">
+            <!-- Left Column: Counter and Daily Message (formerly Our Memories) -->
+            <div class="left-column">
+                <div class="counter-container">
+                    <span id="daysValue" class="days-value">0</span>
+                    <span class="time-label">Seconds</span>
+                    <span id="secondsValue" class="seconds-value">0</span>
+                </div>
+
+                <!-- Daily Message now in the "Our Memories" placeholder spot -->
+                <div class="shared-content-placeholder new-placeholder">
+                    <div class="daily-message-content">
+                        <!-- Replaced cat icons with the new SVG -->
+                        <svg class="daily-message-svg-icon" width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19.9801 9.0625L20.7301 9.06545V9.0625H19.9801ZM4.01995 9.0625H3.26994L3.26995 9.06545L4.01995 9.0625ZM19.0993 10.6602L18.5268 11.1447L18.6114 11.2447L18.725 11.3101L19.0993 10.6602ZM18.8279 9.39546C18.494 9.15031 18.0246 9.22224 17.7795 9.55611C17.5343 9.88999 17.6063 10.3594 17.9401 10.6045L18.8279 9.39546ZM4.01994 15H3.26994V15H4.01994ZM6.05987 10.6045C6.39375 10.3594 6.46568 9.88999 6.22053 9.55612C5.97538 9.22224 5.50598 9.15031 5.1721 9.39546L6.05987 10.6045ZM12 5.65636C11.2279 5.65636 10.7904 5.69743 10.4437 5.74003C10.1041 5.78176 9.93161 5.8125 9.60601 5.8125V7.3125C10.0465 7.3125 10.3308 7.26518 10.6266 7.22883C10.9153 7.19336 11.2918 7.15636 12 7.15636V5.65636ZM12 7.15636C12.7083 7.15636 13.0847 7.19336 13.3734 7.22883C13.6692 7.26518 13.9536 7.3125 14.394 7.3125V5.8125C14.0684 5.8125 13.896 5.78176 13.5563 5.74003C13.2097 5.69743 12.7721 5.65636 12 5.65636V7.15636ZM14.394 7.3125C14.6069 7.3125 14.8057 7.25192 14.9494 7.19867C15.1051 7.14099 15.2662 7.06473 15.4208 6.98509C15.7257 6.82803 16.0797 6.61814 16.4042 6.43125C16.7431 6.23612 17.064 6.0575 17.3512 5.92771C17.6589 5.78868 17.8349 5.75011 17.9053 5.75011V4.25011C17.4968 4.25011 17.0743 4.40685 16.7336 4.56076C16.3725 4.72392 15.9951 4.9359 15.6557 5.13136C15.3019 5.33508 14.9976 5.51578 14.7338 5.65167C14.6041 5.7185 14.5034 5.7643 14.4284 5.79206C14.3415 5.82426 14.3408 5.8125 14.394 5.8125V7.3125ZM17.9053 5.75011C18.2495 5.75011 18.58 5.85266 18.8122 6.0527C19.0237 6.23486 19.2301 6.56231 19.2301 7.18761H20.7301C20.7301 6.18792 20.3778 5.42162 19.7913 4.91628C19.2255 4.42882 18.5186 4.25011 17.9053 4.25011V5.75011ZM19.2301 7.18761V9.0625H20.7301V7.18761H19.2301ZM9.60601 5.8125C9.65925 5.8125 9.65855 5.82426 9.57164 5.79206C9.49668 5.7643 9.39595 5.71849 9.26624 5.65166C9.00249 5.51576 8.69813 5.33504 8.34437 5.13132C8.00493 4.93584 7.62754 4.72384 7.26643 4.56067C6.92577 4.40675 6.5032 4.25 6.09476 4.25V5.75C6.16512 5.75 6.34105 5.78856 6.64878 5.92761C6.93605 6.05741 7.25693 6.23603 7.5958 6.43118C7.92035 6.61808 8.27434 6.82799 8.57919 6.98506C8.73377 7.06471 8.89488 7.14098 9.05059 7.19866C9.19436 7.25191 9.39317 7.3125 9.60601 7.3125V5.8125ZM6.09476 4.25C5.48139 4.25 4.77453 4.42871 4.20872 4.91616C3.62216 5.4215 3.26995 6.18781 3.26995 7.1875H4.76995C4.76995 6.56219 4.97634 6.23475 5.18778 6.05259C5.41998 5.85254 5.75053 5.75 6.09476 5.75V4.25ZM3.26995 7.1875V9.0625H4.76995V7.1875H3.26995ZM12 20.75C13.431 20.75 15.5401 20.4654 17.3209 19.6462C19.1035 18.8262 20.7301 17.3734 20.7301 15H19.2301C19.2301 16.5328 18.2232 17.58 16.694 18.2835C15.1631 18.9877 13.2822 19.25 12 19.25V20.75ZM19.6719 10.1758C19.437 9.89818 19.1575 9.63749 18.8279 9.39546L17.9401 10.6045C18.1808 10.7813 18.3726 10.9625 18.5268 11.1447L19.6719 10.1758ZM19.2301 9.05955C19.2293 9.25778 19.1888 9.67007 19.0916 9.95501C19.0374 10.1139 19.0062 10.1101 19.0627 10.0649C19.1075 10.0289 19.1902 9.98403 19.3002 9.97847C19.4051 9.97317 19.468 10.007 19.4737 10.0103L18.725 11.3101C18.9057 11.4142 19.1272 11.4891 19.3759 11.4766C19.6297 11.4637 19.8412 11.3633 20.0013 11.2349C20.2881 11.0048 20.4331 10.6686 20.5113 10.4392C20.679 9.94758 20.7289 9.35941 20.7301 9.06545L19.2301 9.05955ZM12 19.25C10.7178 19.25 8.83685 18.9877 7.30594 18.2835C5.7768 17.5801 4.76994 16.5328 4.76994 15H3.26994C3.26994 17.3734 4.89649 18.8262 6.67907 19.6462C8.45988 20.4654 10.5689 20.75 12 20.75V19.25ZM4.76994 15C4.76994 14.2119 4.71349 13.5629 4.78890 12.8724C4.85939 12.227 5.04214 11.6541 5.47321 11.1447L4.32811 10.1758C3.64728 10.9804 3.38966 11.8682 3.29777 12.7095C3.21080 13.5058 3.26994 14.3696 3.26994 15L4.76994 15ZM5.47321 11.1447C5.62738 10.9625 5.81916 10.7813 6.05987 10.6045L5.1721 9.39546C4.84248 9.63749 4.56299 9.89818 4.32811 10.1758L5.47321 11.1447ZM3.26995 9.06545C3.27111 9.35941 3.32101 9.94757 3.48871 10.4392C3.56694 10.6686 3.71186 11.0048 3.99873 11.2349C4.15878 11.3633 4.37030 11.4637 4.62412 11.4766C4.87277 11.4891 5.09430 11.4142 5.27501 11.3101L4.52631 10.0103C4.53204 10.007 4.59487 9.97317 4.69976 9.97847C4.80981 9.98403 4.89252 10.0289 4.93734 10.0649C4.99376 10.1101 4.96261 10.1139 4.90840 9.95501C4.81121 9.67007 4.77072 9.25778 4.76994 9.05955L3.26995 9.06545Z" fill="currentColor"/>
+                            <path d="M12.826 16C12.826 16.1726 12.465 16.3125 12.0196 16.3125C11.5742 16.3125 11.2131 16.1726 11.2131 16C11.2131 15.8274 11.5742 15.6875 12.0196 15.6875C12.465 15.6875 12.826 15.8274 12.826 16Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M15.5 13.5938C15.5 14.0252 15.2834 14.375 15.0161 14.375C14.7489 14.375 14.5323 14.0252 14.5323 13.5938C14.5323 13.1623 14.7489 12.8125 15.0161 12.8125C15.2834 12.8125 15.5 13.1623 15.5 13.5938Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M9.5 13.5938C9.5 14.0252 9.28336 14.375 9.01613 14.375C8.74889 14.375 8.53226 14.0252 8.53226 13.5938C8.53226 13.1623 8.74889 12.8125 9.01613 12.8125C9.28336 12.8125 9.5 13.1623 9.5 13.5938Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M22.0004 15.4688C21.5165 15.1562 19.4197 14.375 18.6133 14.375" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M20.3871 17.9688C19.9033 17.6562 18.7742 16.875 17.9678 16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M2 15.4688C2.48387 15.1562 4.58065 14.375 5.38710 14.375" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M3.61279 17.9688C4.09667 17.6562 5.22570 16.875 6.03215 16.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                        <span id="dailyMessage">Daily Text goes here...</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Shared Images Placeholder -->
-            <div class="shared-content-placeholder shared-images-placeholder">
-                <i class="fas fa-image icon"></i>
-                <h3 class="title">Our Shared Images</h3>
-                <p class="coming-soon-text">Coming soon... 🖼️</p>
-            </div>
+            <!-- Right Column: Shared Images and Shared Songs -->
+            <div class="right-column">
+                <!-- Shared Images Placeholder -->
+                <div class="shared-content-placeholder shared-images-placeholder">
+                    <i class="fas fa-image icon"></i>
+                    <h3 class="title">Our Shared Images</h3>
+                    <p class="coming-soon-text">Coming soon... 🖼️</p>
+                </div>
 
-            <!-- Shared Songs Placeholder -->
-            <div class="shared-content-placeholder shared-songs-placeholder">
-                <i class="fas fa-music icon"></i>
-                <h3 class="title">Our Shared Songs</h3>
-                <p class="coming-soon-text">Coming soon... 🎶</p>
-            </div>
-        </div>
-
-        <!-- Daily Message Box -->
-        <div class="daily-message-box">
-            <div class="message-content">
-                <i class="fas fa-cat icon"></i>
-                <span id="dailyMessage">Daily Text goes here...</span>
-                <i class="fas fa-cat icon"></i>
+                <!-- Shared Songs Placeholder -->
+                <div class="shared-content-placeholder shared-songs-placeholder">
+                    <i class="fas fa-music icon"></i>
+                    <h3 class="title">Our Shared Songs</h3>
+                    <p class="coming-soon-text">Coming soon... 🎶</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Removed Custom Cursor Element -->
-    <!-- <div class="custom-cursor"></div> -->
+    <!-- New "Watch Again" section below the main rectangle -->
+    <div class="watch-again-section">
+        <h2>Watch Again</h2>
+        <p>This is where your favorite YouTube videos will appear. Stay tuned!</p>
+        <!-- Placeholder for YouTube videos -->
+        <!-- Example: <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allowfullscreen></iframe> -->
+    </div>
 
     <script>
         const startDate = new Date('2023-11-01T00:00:00'); // Your start date
@@ -628,6 +687,7 @@
         // Get references to the elements for updating
         const daysValue = document.getElementById('daysValue');
         const secondsValue = document.getElementById('secondsValue');
+        // Updated reference for dailyMessageElement to point to the new location
         const dailyMessageElement = document.getElementById('dailyMessage');
 
         const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -646,9 +706,6 @@
         const calendarContent = document.getElementById('calendarContent');
         const closeCalendarModalBtn = document.getElementById('closeCalendarModal');
 
-        // Removed customCursor variable
-        // const customCursor = document.querySelector('.custom-cursor');
-
         // Messages for daily display
         const messages = [
             "I had a brief moment where I looked at you and thought, something has never felt this right - June 19, 2024",
@@ -660,9 +717,9 @@
             ":)",
             "Don't worry about me konjo",
             "You're always worth the wait",
-            "How can you say you're not gonna read them and describe them so passionately - Nov 24, 2023",
+            "How can you say you're not gonna read them and describe them so passionately - Nov 24, 203",
             "Bitch eat actual misir please😭 - September 28, 2024",
-            "One of the many things i admire about you🙂 - January 5, 2025",
+            "One of the many things i admire about you� - January 5, 2025",
             "Be careful of men - May 26, 2024",
             "its so cool when people arent related in blood but become close like family - January 13, 2014",
             "You're my happy place🫶 - nah, i was made for you - June 24, 2025",
@@ -836,6 +893,56 @@
             setDailyMessage(); // Set the daily message on load
             setInterval(updateCounter, 1000);
 
+            // Get a reference to the main rectangle for the float effect
+            const mainRectangle = document.querySelector('.main-rectangle');
+
+            if (mainRectangle) {
+                document.addEventListener('mousemove', (e) => {
+                    // Only apply on larger screens to avoid interference with mobile scrolling
+                    if (window.innerWidth > 768) {
+                        const rect = mainRectangle.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const mouseX = e.clientX;
+                        const mouseY = e.clientY;
+
+                        // Calculate a subtle offset
+                        const moveX = (mouseX - centerX) * 0.02; // Adjust multiplier for intensity
+                        const moveY = (mouseY - centerY) * 0.02; // Adjust multiplier for intensity
+
+                        mainRectangle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    }
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    if (window.innerWidth > 768) {
+                        mainRectangle.style.transform = `translate(0, 0)`; // Reset on mouse leave
+                    }
+                });
+
+                // For touch devices (more subtle movement to avoid interfering with scrolling)
+                document.addEventListener('touchmove', (e) => {
+                    if (window.innerWidth <= 768 && e.touches.length === 1) { // Only one finger to avoid pinch/zoom issues
+                        const rect = mainRectangle.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const touchX = e.touches[0].clientX;
+                        const touchY = e.touches[0].clientY;
+
+                        const moveX = (touchX - centerX) * 0.01; // Even smaller multiplier for touch
+                        const moveY = (touchY - centerY) * 0.01; // Even smaller multiplier for touch
+
+                        mainRectangle.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    }
+                }, { passive: true }); // Use passive to avoid blocking scroll
+
+                document.addEventListener('touchend', () => {
+                    mainRectangle.style.transform = `translate(0, 0)`; // Reset on touch end
+                });
+            }
+
             // Apply saved theme on load
             const storedTheme = localStorage.getItem('theme');
             if (storedTheme === 'dark') {
@@ -891,20 +998,8 @@
                     }
                 });
             }
-
-            // Removed custom cursor logic
-            /*
-            const customCursor = document.querySelector('.custom-cursor');
-            if (customCursor) {
-                document.addEventListener('mousemove', (e) => {
-                    // Only show custom cursor on larger screens (PC)
-                    if (window.innerWidth > 768) {
-                        customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-                    }
-                });
-            }
-            */
         });
     </script>
 </body>
 </html>
+�
